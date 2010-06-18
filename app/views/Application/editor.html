@@ -1,0 +1,116 @@
+#{extends 'main.html' /}
+#{set title:'Editor' /}
+
+#{set 'moreScripts'}
+    #{scripts /}
+    <script type="text/javascript" src="@{'/public/bespin/BespinEmbedded.js'}"></script>
+#{/set}
+
+#{set 'moreStyles'}
+    <link href="@{'/public/bespin/BespinEmbedded.css'}" type="text/css" rel="stylesheet">
+    <style>
+        .bespin {  margin: 0; padding: 0; border: 0; height: 600px; border: 10px solid #ddd; -moz-border-radius: 10px; -webkit-border-radius: 10px; }
+        .bespin canvas {
+            cursor: text;
+        }
+        #pad {position: absolute; right: 10px; top: 10px; left: 600px; bottom: 10px;}
+        #world {background: #444;}
+        #control {display: none;}
+    </style>
+#{/set}
+
+<h1>editor</h1>
+
+<canvas id="world" width="500" height="400"></canvas>
+
+<p id="control">
+    <a href="#" id="start">Start</a> - <a href="#" id="labels">Draw labels</a> - <a href="#" id="scans">Show scans</a> - <a href="#" id="restart">Restart</a>
+</p>
+
+<div id="pad">
+<div id="editor" class="bespin" data-bespinoptions='{ "settings": { "tabstop": 4 }, "syntax": "js", "stealFocus": true }'>${code}</div>
+</div>
+
+<script type="text/javascript" charset="utf-8">
+    var robotURL = #{jsAction @robot(':name')/}    
+    
+    var sitting = new RobotDescription(robotURL({name: 'sitting'}))
+    var editable = new RobotDescription(robotURL({name: 'editable'}))  
+    
+    var game = new Game('world', [sitting, editable], function() {        
+        $('#control').show()        
+    })
+    
+    $('#start').click(function() {
+        switch($(this).html()) {
+            
+            case 'Pause':
+                game.stop()
+                $(this).html('Continue')
+                break
+                
+            default:
+                game.start()
+                $(this).html('Pause')
+                break
+            
+        }
+    })    
+    
+    $('#labels').click(function() {
+        switch($(this).html()) {
+            
+            case 'Draw labels':
+                Configuration.drawText = true
+                game.repaint()
+                $(this).html('Hide labels')
+                break
+                
+            default:
+                Configuration.drawText = false
+                game.repaint()
+                $(this).html('Draw labels')
+                break
+            
+        }
+    })
+    
+    $('#scans').click(function() {
+        switch($(this).html()) {
+            
+            case 'Show scans':
+                Configuration.scanVisible = true
+                game.repaint()
+                $(this).html('Hide scans')
+                break
+                
+            default:
+                Configuration.scanVisible = false
+                game.repaint()
+                $(this).html('Show scans')
+                break
+            
+        }
+    })
+    
+    $('#restart').click(function() {
+        
+        game.restart()
+        $('#start').html('Start')
+        
+    })
+    
+    $(window).keydown(function(e) {
+        if(e.metaKey && e.keyCode == 83) {
+            e.preventDefault()
+            var code = $('#editor')[0].bespin.value
+            var saveAction = #{jsAction @saveRobotScript(':id') /}
+            $.post(saveAction({id: 'editable'}), code, function() {
+                game.reload(editable)
+            })
+        }
+    })
+    
+</script>
+
+

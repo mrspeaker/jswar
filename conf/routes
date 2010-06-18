@@ -1,0 +1,18 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# Home page
+GET     /                                       Application.index
+
+GET     /demo                                   Application.demo
+
+GET     /robots/ai-{id}                         Application.robotScript
+POST    /robots/ai-{id}                         Application.saveRobotScript
+GET     /robots/ds-{id}                         Application.robot
+
+GET     /assets/                                staticDir:public
+GET     /robots/                                staticDir:public/javascripts
+
+# Catch all
+*       /{controller}/{action}                  {controller}.{action}

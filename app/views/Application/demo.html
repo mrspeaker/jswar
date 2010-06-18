@@ -1,0 +1,98 @@
+#{extends 'main.html' /}
+#{set title:'Demo' /}
+
+#{set 'moreScripts'}
+    #{scripts /}
+#{/set}
+
+#{set 'moreStyles'}
+    <style>
+        #world {background: #444;}
+        #control {display: none;}
+    </style>
+#{/set}
+
+<h1>demo</h1>
+
+<canvas id="world" width="500" height="400"></canvas>
+
+<p id="control">
+    <a href="#" id="start">Start</a> - <a href="#" id="labels">Draw labels</a> - <a href="#" id="scans">Show scans</a> - <a href="#" id="restart">Restart</a>
+</p>
+
+<script type="text/javascript" charset="utf-8">
+    var robotURL = #{jsAction @robot(':name')/}    
+    
+    var sitting = new RobotDescription(robotURL({name: 'sitting'}))
+    var tracker = new RobotDescription(robotURL({name: 'tracker'}))  
+    var walls = new RobotDescription(robotURL({name: 'walls'}))
+    var crazy = new RobotDescription(robotURL({name: 'crazy'}))  
+    
+    var game = new Game('world', [sitting, tracker, walls, crazy], function() {
+        
+        $('#control').show()
+        
+    })
+    
+    $('#start').click(function() {
+        switch($(this).html()) {
+            
+            case 'Pause':
+                game.stop()
+                $(this).html('Continue')
+                break
+                
+            default:
+                game.start()
+                $(this).html('Pause')
+                break
+            
+        }
+    })    
+    
+    $('#labels').click(function() {
+        switch($(this).html()) {
+            
+            case 'Draw labels':
+                Configuration.drawText = true
+                game.repaint()
+                $(this).html('Hide labels')
+                break
+                
+            default:
+                Configuration.drawText = false
+                game.repaint()
+                $(this).html('Draw labels')
+                break
+            
+        }
+    })
+    
+    $('#scans').click(function() {
+        switch($(this).html()) {
+            
+            case 'Show scans':
+                Configuration.scanVisible = true
+                game.repaint()
+                $(this).html('Hide scans')
+                break
+                
+            default:
+                Configuration.scanVisible = false
+                game.repaint()
+                $(this).html('Show scans')
+                break
+            
+        }
+    })
+    
+    $('#restart').click(function() {
+        
+        game.restart()
+        $('#start').html('Start')
+        
+    })
+    
+</script>
+
+
