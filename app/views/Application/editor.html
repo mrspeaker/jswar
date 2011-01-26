@@ -28,8 +28,10 @@
 </p>
 
 <div id="pad">
-<div id="editor" class="bespin" data-bespinoptions='{ "settings": { "tabstop": 4 }, "syntax": "js", "stealFocus": true }'>${code}</div>
+<div id="editor" class="bespin" data-bespinoptions='{ "settings": { "tabstop": 4 }, "syntax": "js", "stealFocus": true }'></div>
 </div>
+
+<textarea id="tmpscript">${code.raw()}</textarea>
 
 <script type="text/javascript" charset="utf-8">
     var robotURL = #{jsAction @robot(':name')/}    
@@ -37,9 +39,14 @@
     var sitting = new RobotDescription(robotURL({name: 'sitting'}))
     var editable = new RobotDescription(robotURL({name: 'editable'}))  
     
-    var game = new Game('world', [sitting, editable], function() {        
+    var game = new Game('world', [sitting, editable, sitting], function() {        
         $('#control').show()        
     })
+    
+    window.onBespinLoad = function(){
+        $('#editor')[0].bespin.value = $("#tmpscript").val()
+        game.reload(editable)
+    };
     
     $('#start').click(function() {
         switch($(this).html()) {
@@ -94,7 +101,6 @@
     })
     
     $('#restart').click(function() {
-        
         game.restart()
         $('#start').html('Start')
         
