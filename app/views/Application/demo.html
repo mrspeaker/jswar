@@ -10,31 +10,45 @@
         body {
             margin: 0;
             padding: 0;
-            background-color: #000;
+            background-color: #333;
         }
-        #world {background: #444;}
+        #world {background: transparent;}
         #control {display: none;}
     </style>
 #{/set}
 
-<canvas id="world" width="1920" height="960"></canvas>
-
-<p id="control">
-    <a href="#" id="start">Start</a> - <a href="#" id="labels">Draw labels</a> - <a href="#" id="scans">Show scans</a> - <a href="#" id="restart">Restart</a>
-</p>
+<div id="wrapper">
+	<header>
+	</header>
+	<div id="map">
+	    <canvas id="world" width="1920" height="960"></canvas>
+	</div>
+	<footer>
+		<ul id="players">
+			<li><a href="#" id="start">Start</a> - <a href="#" id="labels">Draw labels</a> - <a href="#" id="scans">Show scans</a> - <a href="#" id="restart">Restart</a></li>
+			<li>Earl</li>
+			<li>Gre</li>
+			<li>JeanSeb</li>
+			<li>Warry</li>
+		</ul>
+	</footer>
+</div>
+<div id="debug">
+	Put all your debug stuffs here.
+	Go to /#debug to display it!
+</div>
 
 <script type="text/javascript" charset="utf-8">
     var robotURL = #{jsAction @robot(':name')/}
+        
     
     var sitting = new RobotDescription(robotURL({name: 'sitting'}))
-    //var tracker = new RobotDescription(robotURL({name: 'tracker'}))  
+    //var tracker = new RobotDescription(robotURL({name: 'tracker'}))
     var walls = new RobotDescription(robotURL({name: 'walls'}))
     var crazy = new RobotDescription(robotURL({name: 'crazy'}))  
     
     var game = new Game('world', [sitting, crazy, crazy, walls, walls, crazy], function() {
-        
-        $('#control').show()
-        
+        //$('#control').show()
     })
     
     $('#start').click(function() {
