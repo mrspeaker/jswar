@@ -8,22 +8,6 @@
 
 #{set 'moreStyles'}
     <link rel="stylesheet" type="text/css" media="screen" href="@{'/public/stylesheets/main.css'}">
-    <style type="text/css" media="screen">
-        #timetime{
-            display: none;
-            position:absolute;
-            top:0;
-            left:0;
-            width:100px;
-            height:80px;
-            color: #000;
-            background-color:#ff0;
-            font-size:24pt;
-            font-family:helvetica;
-            text-align: center;
-            line-height: 80px;
-        }
-    </style>
 #{/set}
 
 <div id="wrapper">
@@ -39,8 +23,10 @@
 	</footer>
 </div>
 <div id="timetime">120</div>
+<div id="win"></div>
 <div id="debug">
-    <a href="#" id="start">Start</a> - <a href="#" id="labels">Draw labels</a> - <a href="#" id="scans">Show scans</a> - <a href="#" id="restart">Restart</a>
+    <a href="#close" id="start">Start</a> - <a href="javascript:" id="labels">Draw labels</a> - <a href="javascript:" id="scans">Show scans</a> - <a href="javascript:" id="restart">Restart</a>
+    <a href="#close" id="start">Close</a>
 </div>
 
 
