@@ -5,12 +5,16 @@ var MyRobot = Robot.extend({
     direction: 'ahead',
     
     play: function() {
+        
         if(this.direction == 'ahead') this.ahead(); else this.back();
         if(this.gunBearing != 180) {
             this.turnGunRight(2)
         }
     },
     
+    ahead: function(){
+        this.command.acceleration = 100;
+    },
     onRobotScanned: function(e) {
         this.fire(1)
     },
@@ -28,6 +32,7 @@ var MyRobot = Robot.extend({
 })
 
 new MyRobot()
+
 
 
 

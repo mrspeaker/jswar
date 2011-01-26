@@ -1,3 +1,39 @@
+var parisjs = {
+    roundLength: 10,
+    winners: [],
+    loadRobots: function(){
+        // Fetch the bots, retrieve urls...
+        var urls = [robotURL({name: 'tracker'}), robotURL({name: 'crazy'}), robotURL({name: 'walls'})],
+            urls = urls.concat(urls).concat(urls),
+            bots = $.map(urls, function(url){
+                return new RobotDescription(url);
+            });
+        game.reloadAll('world', bots, function() { });
+    },
+    startRound: function(){
+        this.startTime = new Date();
+        this.running = true;
+    },
+    stopRound: function(bots){
+        if (!this.running) return;
+        this.running = false;
+        var survivors = $.map(bots, function(bot){ return bot.name + ":" + bot.energy; }),
+            winners = _.sortBy(survivors, function(bot){ return bot.energy });
+        this.winners.push(winners[0])
+        alert("winner " + winners[0] + "\n\n" + this.winners);
+    },
+    tick: function(){
+        //console.log(this.roundLength - ((new Date() - this.startTime) / 1000));
+    },
+    isRoundOver: function(){
+        var finished = (new Date() - this.startTime) / 1000 > this.roundLength;
+        if(!finished){
+            return false;
+        }
+        return true;
+    }
+};
+
 var Game = Class.extend({
     
     constructor: function(el, robots, readyCallback, timeoutCallback) {
@@ -36,7 +72,7 @@ var Game = Class.extend({
         var game = this
         game.stop();
         new AsyncLoader(robots, 5000, 
-            function() {
+            function() {    
                 game.world = new World(document.getElementById(el), robots)
                 game.world.init()
                 if(readyCallback) readyCallback()
@@ -109,7 +145,7 @@ var World = Class.extend({
         // Bullets
         this.bullets = []
         this.explosions = []
-        
+                    
         // Frame timer
         this.timer = new FrameTimer(48)
         this.timer.tick()
@@ -119,6 +155,7 @@ var World = Class.extend({
     },
     
     start: function() {
+        if(!parisjs.running)parisjs.startRound();
         this.liveTimer = setInterval(x$.bind(this.live, this), 5)
     },
     
@@ -131,15 +168,20 @@ var World = Class.extend({
     },
     
     live: function() {
+        if( parisjs.isRoundOver() ){
+            parisjs.stopRound(this.robots);
+            return false;
+        }
         if(this.timer.isTime()) {
             this.timer.tick()
-            
+                        
             var world = this
             
             // Round end
             var winner
             if(this.robots.length == 1) {
-                winner = this.robots[0]
+                winner = this.robots[0];
+                parisjs.stopRound(this.robots)
             }
             
             // Move robot
@@ -152,6 +194,8 @@ var World = Class.extend({
                 }
                 this.command = {}
             })
+            
+            parisjs.tick();
             
             this.draw()
             
@@ -287,14 +331,14 @@ var RobotProxy = Class.extend({
         if(Configuration.drawText) {
             var status = this.name + ': ' + this.energy.toFixed(1)
             this.ctx.fillStyle = '#ffffff'
-            this.ctx.font = "10px Arial";
+            this.ctx.font = "17px Arial";
             var w = this.ctx.measureText(status).width
             this.ctx.fillText(status, this.box.x - w/2, this.box.y + (this.box.size * (this.box.y > this.world.h - this.box.size ? -1 : 1)) )
         }
         
         // Draw scan area?
         if(Configuration.scanVisible && this.scanArea) {
-            this._drawPolygon(this.scanArea, 'rgba(255,0,0,.2)')
+            this._drawPolygon(this.scanArea, 'rgba(255,0,0,.1)')
         }
         
         // Draw corners

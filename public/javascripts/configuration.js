@@ -1,9 +1,9 @@
 var Configuration = {
     
     sound: false,
-    scanVisible: false,
+    scanVisible: true,
     drawCorners: false,
-    drawText: false
+    drawText: true
     
 }
 

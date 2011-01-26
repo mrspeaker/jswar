@@ -3,18 +3,11 @@
 
 #{set 'moreScripts'}
     #{scripts /}
+    <link rel="stylesheet" type="text/css" media="screen" href="@{'/public/stylesheets/main.css'}">
 #{/set}
 
 #{set 'moreStyles'}
-    <style type="text/css" media="screen">
-        body {
-            margin: 0;
-            padding: 0;
-            background-color: #333;
-        }
-        #world {background: transparent;}
-        #control {display: none;}
-    </style>
+    <style type="text/css" media="screen"></style>
 #{/set}
 
 <div id="wrapper">
@@ -43,11 +36,12 @@
         
     
     var sitting = new RobotDescription(robotURL({name: 'sitting'}))
-    //var tracker = new RobotDescription(robotURL({name: 'tracker'}))
+    var tracker = new RobotDescription(robotURL({name: 'tracker'}))
     var walls = new RobotDescription(robotURL({name: 'walls'}))
     var crazy = new RobotDescription(robotURL({name: 'crazy'}))  
     
-    var game = new Game('world', [sitting, crazy, crazy, walls, walls, crazy], function() {
+    var bots = [sitting, tracker];
+    var game = new Game('world', bots, function() {
         //$('#control').show()
     })
     
@@ -104,17 +98,11 @@
     })
     
     $('#restart').click(function() {
-        
         //game.restart()
         // Test dynamic loading
-        window.tracker = new RobotDescription(robotURL({name: 'tracker'}));
-        game.reloadAll('world', [sitting, tracker, walls, crazy, crazy, crazy, crazy, crazy, tracker, tracker, tracker], function() {
-        
-        });
+        parisjs.loadRobots();
         $('#start').html('Start');
-        
     })
-    
 </script>
 
 
