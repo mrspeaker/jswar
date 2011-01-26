@@ -1,10 +1,12 @@
+var gRoundLength = 10,
+    gNumBots = 8;
+    
 var parisjs = {
-    roundLength: 15,
     winners: [],
     lastTime: 0,
     loadRobots: function(){
         // Fetch the bots, retrieve urls...
-        $.getJSON("/robots/list/8", function(urls){
+        $.getJSON("/robots/list/" + gNumBots, function(urls){
             urls = urls.concat([robotURL({name: 'tracker'}), robotURL({name: 'crazy'}), robotURL({name: 'walls'})]);
             var bots = $.map(urls, function(url){
                 return new RobotDescription(url);
@@ -32,14 +34,14 @@ var parisjs = {
         $("#timetime").hide()
     },
     tick: function(){
-        var remain = ~~(this.roundLength - ((new Date() - this.startTime) / 1000));
+        var remain = ~~(gRoundLength - ((new Date() - this.startTime) / 1000));
         if(remain != this.lastTime){
             this.lastTime = remain;
             $("#timetime").text(remain);
         }
     },
     isRoundOver: function(){
-        var finished = (new Date() - this.startTime) / 1000 > this.roundLength;
+        var finished = (new Date() - this.startTime) / 1000 > gRoundLength;
         if(!finished){
             return false;
         }
