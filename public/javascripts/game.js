@@ -201,7 +201,21 @@ var RobotProxy = Class.extend({
     },
     
     onmessage: function(event) {
-        var message = JSON.parse(event.data)
+      var limit = 100; // limit message per second
+      var now = new Date().getTime();
+      if(!this.spamLastDate) this.spamLastDate = now;
+      if(!this.spamMessageCount) this.spamMessageCount = 0;
+      if(now-this.spamLastDate > 1000) {
+        if(this.spamMessageCount/((now - this.spamLastDate)/1000) > limit) {
+          this.worker.terminate(); // kill spammers
+        }
+        this.spamLastDate = now;
+        this.spamMessageCount = 0;
+      }
+      ++ this.spamMessageCount;
+      
+      try {
+        var message = JSON.parse(event.data);
         switch(message.type) {
 
             case 'command':
@@ -217,6 +231,10 @@ var RobotProxy = Class.extend({
                 console.log('DEBUG('+this.name+'): ' + message.data)
 
         }
+      }
+      catch(e) {
+        
+      }
     },
     
     destroy: function() {
