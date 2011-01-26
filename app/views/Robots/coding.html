@@ -17,7 +17,7 @@
         #world {background: #444;}
         #control {display: none;}
   form {
-    width: 300px;
+    width: 500px;
   }
   input, textarea {
     width: 100%;
@@ -29,7 +29,7 @@
 #{form @update()}
 <p style="display: none;">
   <label for="script">Script :</label>
-  <textarea id="script" name="script" rows="1">#{if robot.script}${robot.script}#{/if}#{else}importScripts('robot.js');
+  <textarea id="script" name="script" rows="1">#{if robot.localScript}${robot.localScript}#{/if}#{else}importScripts('robot.js');
 
 var CrazyRobot = Robot.extend({
     
@@ -66,12 +66,13 @@ new CrazyRobot()#{/else}</textarea>
     <input id="name" name="name" type="text" value="${robot.name}" />
   </p>
   <p class="buttons">
-    <button id="sendit">Send</button>
+    <button id="sendit">Envoyer à la télé</button>
+    <a href="#" id="save">Sauvegarder localement</a>
   </p>
 #{/form}
 
 
-<canvas id="world" width="400" height="400"></canvas>
+<canvas id="world" width="500" height="500"></canvas>
 
 <p id="control">
     <a href="#" id="start">Start</a> - <a href="#" id="labels">Draw labels</a> - <a href="#" id="scans">Show scans</a> - <a href="#" id="restart">Restart</a>
@@ -82,26 +83,18 @@ new CrazyRobot()#{/else}</textarea>
 </div>
 
 <script type="text/javascript" charset="utf-8">
-    
-    window.onBespinLoad = function(){
-        $('#editor')[0].bespin.value = $("#script").val()
-        game.reload(editable)
-    };
-    $(document).bind("keyup", function(){
-        $("#script").val($('#editor')[0].bespin.value);
-    });
 
-
-    #{if robot.script}
+    #{if robot.localScript}
     
     var robotURL = #{jsAction @Application.robot(':name')/}    
     
     var crazy = new RobotDescription(robotURL({name: 'crazy'}));
     
     var robots = [crazy];
+    var robot = robots.push(new RobotDescription("@{Robots.robot(robot.id, 'sitting', true)}"));
     
     #{list items: robots}
-      robots.push(new RobotDescription("@{Robots.robot(_.id, _.equals(robot) ? 'sitting' : 'crazy')}"));
+      robots.push(new RobotDescription("@{Robots.robot(_.id)}"));
     #{/list}
     
     var game = new Game('world', robots, function() {
@@ -170,6 +163,25 @@ new CrazyRobot()#{/else}</textarea>
     })
     
     #{/if}
+    
+    
+    window.onBespinLoad = function(){
+        $('#editor')[0].bespin.value = $("#script").val();
+        game.reload(robot);
+    };
+    $(document).bind("keyup", function(){
+        var code = $('#editor')[0].bespin.value;
+        $("#script").val(code);
+    });
+    
+    $('#save').click(function(){
+        var code = $('#editor')[0].bespin.value;
+        $("#script").val(code);
+        var saveAction = #{jsAction @updateLocal() /}
+        $.post(saveAction(), {script: code}, function() {
+            game.reload(robot);
+        })
+    });
     
 </script>
 

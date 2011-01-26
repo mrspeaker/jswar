@@ -16,6 +16,8 @@ public class Robot extends Model {
 	
 	public String script;
 	
+	public String localScript;
+	
 	public Date date;
 
 	public Robot(String userid) {

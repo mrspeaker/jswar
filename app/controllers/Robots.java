@@ -16,19 +16,19 @@ import play.mvc.Controller;
 
 public class Robots extends Controller {
 	
-	public static void robotScript(Long id) {
+	public static void robotScript(Long id, boolean isLocal) {
 		Robot r = Robot.findById(id);
 		notFoundIfNull(r);
-		renderText(r.script);
+		renderText(isLocal ? r.localScript : r.script);
 	}
 	
-	public static void robot(Long id, String idColor) throws Exception {
+	public static void robot(Long id, String idColor, boolean isLocal) throws Exception {
 		notFoundIfNull(id);
 		Robot robot = Robot.findById(id);
 		notFoundIfNull(robot);
 		if(idColor==null) idColor = "crazy";
 
-        Object script = reverse();{robotScript(id);}
+        Object script = reverse();{robotScript(id, isLocal);}
         
         Map description = new HashMap();
         description.put("name", robot.name);
@@ -57,11 +57,11 @@ public class Robots extends Controller {
 	
 	public static void coding() {
 		verifyUserId();
-		int limit = 8;
+		int limit = 4;
 		List<Robot> robots = Robot.getRobots(limit);
 		Robot robot = Robot.findOrCreate(session.get("user"));
-		if(!robots.contains(robot))
-			robots.add(robot);
+		if(robots.contains(robot))
+			robots.remove(robot);
 		render(robots, robot);
 	}
 	
@@ -70,8 +70,16 @@ public class Robots extends Controller {
 		Robot existingRobot = Robot.findOrCreate(session.get("user"));
 		if(name != null)
 			existingRobot.name = name;
-		existingRobot.script = script;
+		existingRobot.localScript = existingRobot.script = script;
 		existingRobot.date = new Date();
+		existingRobot.save();
+		coding();
+	}
+	
+	public static void updateLocal(String script) {
+		verifyUserId();
+		Robot existingRobot = Robot.findOrCreate(session.get("user"));
+		existingRobot.localScript = script;
 		existingRobot.save();
 		coding();
 	}
