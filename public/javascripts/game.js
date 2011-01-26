@@ -32,6 +32,21 @@ var Game = Class.extend({
         this.world.init()
     },
     
+    reloadAll: function(el, robots, readyCallback, timeoutCallback){
+        var game = this
+        game.stop();
+        new AsyncLoader(robots, 5000, 
+            function() {
+                game.world = new World(document.getElementById(el), robots)
+                game.world.init()
+                if(readyCallback) readyCallback()
+            },
+            timeoutCallback || function(notLoaded) {
+                alert('TIMEOUT -> ' + notLoaded.toString())
+            }
+        )
+    },
+    
     reload: function(robot) {
         this.world.stop()
         for(var i=0; i<this.world.robots.length; i++) {
