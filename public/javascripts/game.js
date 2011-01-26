@@ -1,4 +1,4 @@
-var gRoundLength = 110,
+var gRoundLength = 90,
     gNumBots = 12;
     
 var parisjs = {
