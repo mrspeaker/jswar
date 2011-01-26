@@ -3,10 +3,11 @@
 
 #{set 'moreScripts'}
     #{scripts /}
-    <link rel="stylesheet" type="text/css" media="screen" href="@{'/public/stylesheets/main.css'}">
+
 #{/set}
 
 #{set 'moreStyles'}
+    <link rel="stylesheet" type="text/css" media="screen" href="@{'/public/stylesheets/main.css'}">
     <style type="text/css" media="screen">
         #timetime{
             display: none;
@@ -29,20 +30,19 @@
 	<header>
 	</header>
 	<div id="map">
-	    <canvas id="world" width="1900" height="960"></canvas>
+	    <canvas id="world" width="1920" height="960"></canvas>
 	</div>
 	<footer>
 		<ul id="players">
-			<li>Earl</li>
-			<li>Gre</li>
-			<li>JeanSeb</li>
-			<li>Warry</li>
+
 		</ul>
 	</footer>
 </div>
-<div id="debug">
-    <a href="#" id="start">Start</a> - <a href="#" id="labels">Draw labels</a> - <a href="#" id="scans">Show scans</a> - <a href="#" id="restart">Restart</a></div>
 <div id="timetime">120</div>
+<div id="debug">
+    <a href="#" id="start">Start</a> - <a href="#" id="labels">Draw labels</a> - <a href="#" id="scans">Show scans</a> - <a href="#" id="restart">Restart</a>
+</div>
+
 
 <script type="text/javascript" charset="utf-8">
     var robotURL = #{jsAction @robot(':name')/}

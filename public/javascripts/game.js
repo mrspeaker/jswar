@@ -1,15 +1,16 @@
 var parisjs = {
-    roundLength: 10,
+    roundLength: 3 * 60,
     winners: [],
     lastTime: 0,
     loadRobots: function(){
         // Fetch the bots, retrieve urls...
-        var urls = [robotURL({name: 'tracker'}), robotURL({name: 'crazy'}), robotURL({name: 'walls'})],
-            urls = urls.concat(urls).concat(urls),
-            bots = $.map(urls, function(url){
+        $.getJSON("/robots/list/8", function(urls){
+            urls = urls.concat([robotURL({name: 'tracker'}), robotURL({name: 'crazy'}), robotURL({name: 'walls'})]);
+            var bots = $.map(urls, function(url){
                 return new RobotDescription(url);
             });
-        game.reloadAll('world', bots, function() { });
+            game.reloadAll('world', bots, function() { });
+        });
     },
     startRound: function(){
         this.startTime = new Date();
@@ -19,10 +20,11 @@ var parisjs = {
     stopRound: function(bots){
         if (!this.running) return;
         this.running = false;
-        var survivors = $.map(bots, function(bot){ return bot.name + ":" + bot.energy; }),
-            winners = _.sortBy(survivors, function(bot){ return bot.energy });
+        var survivors = $.map(bots, function(bot){ return {"name": bot.name, "energy": bot.energy } }),
+            winners = survivors.sort(function(a,b){return a.energy<b.energy;});//_.sortBy(survivors, function(bot){ return bot.energy });
+
         this.winners.push(winners[0])
-        alert("winner " + winners[0] + "\n\n" + this.winners);
+        alert("winner " + winners[0].name + "\n\n" + _.pluck(winners,"energy"));
         $("#timetime").hide()
     },
     tick: function(){
@@ -31,6 +33,9 @@ var parisjs = {
             this.lastTime = remain;
             $("#timetime").text(remain);
         }
+        if(remain % 10 === 0){
+            this.oneDown(game.world.robots);
+        }
     },
     isRoundOver: function(){
         var finished = (new Date() - this.startTime) / 1000 > this.roundLength;
@@ -38,6 +43,14 @@ var parisjs = {
             return false;
         }
         return true;
+    },
+    oneDown: function(bots){
+        var survivors = $.map(bots, function(bot){ return bot.name + ":" + bot.energy; }),
+            winners = _.sortBy(survivors, function(bot){ return bot.energy }).slice(0,5);
+        $("#players").html("");
+        $.each(winners, function(winner){
+            $("<li></li>").appendTo("#players").text(winner.name);
+        });
     }
 };
 
@@ -304,6 +317,7 @@ var RobotProxy = Class.extend({
     },
     
     destroy: function() {
+        parisjs.oneDown(this.world.robots);
         for(var i=0; i<this.world.robots.length; i++) {
             if(this.world.robots[i] == this) {
                 this.world.robots.splice(i,1)

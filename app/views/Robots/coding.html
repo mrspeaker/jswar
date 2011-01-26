@@ -3,16 +3,21 @@
 
 #{set 'moreScripts'}
     #{scripts /}
+    <script type="text/javascript" src="@{'/public/bespin/BespinEmbedded.js'}"></script>
 #{/set}
 
 #{set 'moreStyles'}
+    <link href="@{'/public/bespin/BespinEmbedded.css'}" type="text/css" rel="stylesheet">
     <style>
+        .bespin {  margin: 0; padding: 0; border: 0; height: 600px; border: 10px solid #ddd; -moz-border-radius: 10px; -webkit-border-radius: 10px; }
+        .bespin canvas {
+            cursor: text;
+        }
+        #pad {position: absolute; right: 20px; top: 10px; left: 600px; bottom: 10px;}
         #world {background: #444;}
         #control {display: none;}
   form {
-    width: 50%;
-    float: right;
-    
+    width: 300px;
   }
   input, textarea {
     width: 100%;
@@ -22,16 +27,16 @@
 
 
 #{form @update()}
-  <p>
+<p>
+  <label for="script">Script :</label>
+  <textarea id="script" name="script" rows="1">${robot.script}</textarea>
+</p>
+<p>
     <label for="name">Nom du robot :</label>
     <input id="name" name="name" type="text" value="${robot.name}" />
   </p>
-  <p>
-    <label for="script">Script :</label>
-    <textarea id="script" name="script" rows="20">${robot.script}</textarea>
-  </p>
   <p class="buttons">
-    <button>Send</button>
+    <button id="sendit">Send</button>
   </p>
 #{/form}
 
@@ -41,6 +46,10 @@
 <p id="control">
     <a href="#" id="start">Start</a> - <a href="#" id="labels">Draw labels</a> - <a href="#" id="scans">Show scans</a> - <a href="#" id="restart">Restart</a>
 </p>
+
+<div id="pad">
+<div id="editor" class="bespin" data-bespinoptions='{ "settings": { "tabstop": 4 }, "syntax": "js", "stealFocus": true }'></div>
+</div>
 
 <script type="text/javascript" charset="utf-8">
     var robotURL = #{jsAction @Application.robot(':name')/}    
@@ -58,6 +67,15 @@
         $('#control').show()
         
     })
+    
+    window.onBespinLoad = function(){
+        $('#editor')[0].bespin.value = $("#script").val()
+        game.reload(editable)
+    };
+    $(document).bind("keyup", function(){
+        $("#script").val($('#editor')[0].bespin.value);
+    });
+    
     
     $('#start').click(function() {
         switch($(this).html()) {
