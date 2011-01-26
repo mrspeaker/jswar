@@ -1,10 +1,77 @@
-#{extends 'main.html' /}
-#{set title:'Home' /}
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>JSwar</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
+		<style>
+			* { margin:0;padding:0;outline:0;border:0; }
 
-<h1>js war</h1>
+			html, body {
+				width: 100%;
+				height: 100%;
+			}
 
-<ul>
-    <li><a href="@{demo()}">Demo</a></li>
-    <li><a href="@{editor()}">Editor</a></li>
-</ul>
+			body {
+				font: 13px arial;
+				background: #222;
+			}
 
+			#wrapper {
+				margin: 50px auto;
+				width: 500px;
+			}
+			header {
+				color: #ffbd00;
+				font-size: 40px;
+				text-shadow: 1px 1px 0 black;
+			}
+			article {
+				background: #eee;
+				margin: 20px 0;
+				padding: 20px;
+			}
+			h1 {
+				color: #666;
+			}
+			p {
+				margin: 10px 0;
+			}
+			a {
+				color: blue;
+			}
+			footer {
+				color: #666;
+			}
+			footer a {
+				color: #fff;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="wrapper">
+			<header>
+				JSwar
+			</header>
+			<seciton>
+				<article>
+					<h1>What?</h1>
+					<p>JSwar est un jeu de tanks pour développeurs Javascript. Le but est de détruire les autres tanks, en utilisant son canon pour les repérer et les bombarder. Là où cela devient intéressant, c'est que chaque robot est programmé en Javascript...</p>
+				</article>
+				<article>
+					<h1>How?</h1>
+					<p>Chaque tank est isolé dans un WebWorker. Le jeu communique avec les tanks via des messages, et vice-versa. Vous devez donc écouter les messages que vous envoie le jeu. Aidez-vous du code de base, et regardez les méthodes publiques dans ce fichier: <a href="/public/javascript/robot.js">robot.js</a></p>
+					<p>Vous pouvez coder et tester le jeu dans l'éditeur, puis publier votre robot lorsqu'il marche comme vous le vouliez.</p>
+				</article>
+				<article>
+					<h1>Where?</h1>
+					<p><a href="#GOOO">Cliquez ici</a> pour accèder à l'éditeur, et commencer à jouer. Gardez un oeil sur l'écran de TV pour voir les robots s'affronter !</p>
+				</article>
+			</seciton>
+			<footer>
+				<p>JSwar a été développé par Guillaume Bort.</p>
+				<p>Il a été adapté par Zenexity pour le Paris-JS du 26/01/11.</p>
+				<p><a href="#GOOO">Fork-me on Github</a></p>
+			</footer>
+		</div>
+	</body>
+</html>

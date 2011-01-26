@@ -27,7 +27,6 @@ public class Application extends Controller {
         // Definition
         String name = id;
         Object script = reverse();{robotScript(id);}
-        
         Map description = new HashMap();
         description.put("name", name);
         description.put("script", script.toString());

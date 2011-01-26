@@ -7,6 +7,17 @@ GET     /                                       Application.index
 
 GET     /demo                                   Application.demo
 
+GET     /coding                                 Robots.coding
+POST    /coding                                 Robots.update
+GET     /test									Robots.runLocal
+GET     /test/{limit}						    Robots.runLocal
+GET     /run									Robots.run
+GET     /run/{limit}						    Robots.run
+
+GET     /robots/user-{id}-{idColor}				Robots.robot
+GET     /robots/usercode-{id}					Robots.robotScript
+GET     /robots/user-{id}						Robots.robot
+
 GET     /robots/ai-{id}                         Application.robotScript
 POST    /robots/ai-{id}                         Application.saveRobotScript
 GET     /robots/ds-{id}                         Application.robot
