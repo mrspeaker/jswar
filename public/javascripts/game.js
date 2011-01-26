@@ -1,5 +1,5 @@
 var gRoundLength = 10,
-    gNumBots = 8;
+    gNumBots = 12;
     
 var parisjs = {
     winners: [],
@@ -7,7 +7,9 @@ var parisjs = {
     loadRobots: function(){
         // Fetch the bots, retrieve urls...
         $.getJSON("/robots/list/" + gNumBots, function(urls){
-            urls = urls.concat([robotURL({name: 'tracker'}), robotURL({name: 'crazy'}), robotURL({name: 'walls'})]);
+            if(urls.length < 4){
+                urls = urls.concat([robotURL({name: 'tracker'}), robotURL({name: 'crazy'}), robotURL({name: 'walls'})]);
+            }
             var bots = $.map(urls, function(url){
                 return new RobotDescription(url);
             });
