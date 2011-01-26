@@ -14,6 +14,7 @@ GET     /test/{limit}						    Robots.runLocal
 GET     /run									Robots.run
 GET     /run/{limit}						    Robots.run
 
+GET     /robots/list/{limit}                 	Robots.robots
 GET     /robots/user-{id}-{idColor}				Robots.robot
 GET     /robots/usercode-{id}					Robots.robotScript
 GET     /robots/user-{id}						Robots.robot

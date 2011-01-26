@@ -1,5 +1,6 @@
 package controllers;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -37,6 +38,15 @@ public class Robots extends Controller {
         description.put("radar", Images.toBase64(Play.getFile("robots-base/"+idColor+"/radar.png")));
         description.put("bullet", Images.toBase64(Play.getFile("robots-base/"+idColor+"/bullet.png")));
         renderJSON(description);
+	}
+	
+	public static void robots(Integer limit) {
+		if(limit==null || limit < 1) limit = 8;
+		List<String> urls = new ArrayList<String>();
+		List<Robot> robots = Robot.getRobots(limit);
+		for(Robot r : robots)
+			urls.add("/robots/user-"+r.id);
+		renderJSON(urls);
 	}
 	
 	private static void verifyUserId() {
