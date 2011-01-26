@@ -6,22 +6,25 @@
 #{/set}
 
 #{set 'moreStyles'}
-    <style>
+    <style type="text/css" media="screen">
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+        }
         #world {background: #444;}
         #control {display: none;}
     </style>
 #{/set}
 
-<h1>demo</h1>
-
-<canvas id="world" width="500" height="400"></canvas>
+<canvas id="world" width="1920" height="960"></canvas>
 
 <p id="control">
     <a href="#" id="start">Start</a> - <a href="#" id="labels">Draw labels</a> - <a href="#" id="scans">Show scans</a> - <a href="#" id="restart">Restart</a>
 </p>
 
 <script type="text/javascript" charset="utf-8">
-    var robotURL = #{jsAction @robot(':name')/}    
+    var robotURL = #{jsAction @robot(':name')/}
     
     var sitting = new RobotDescription(robotURL({name: 'sitting'}))
     var tracker = new RobotDescription(robotURL({name: 'tracker'}))  
