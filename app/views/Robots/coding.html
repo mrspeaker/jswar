@@ -27,9 +27,39 @@
 
 
 #{form @update()}
-<p>
+<p style="display: none;">
   <label for="script">Script :</label>
-  <textarea id="script" name="script" rows="1">${robot.script}</textarea>
+  <textarea id="script" name="script" rows="1">#{if robot.script}${robot.script}#{/if}#{else}importScripts('robot.js');
+
+var CrazyRobot = Robot.extend({
+    
+    direction: 'ahead',
+    
+    play: function(state) {
+
+        if(this.direction == 'ahead') {
+            this.ahead()
+        } else {
+            this.back()
+        }
+
+        this.turnRight()
+        this.turnGunRight()
+        this.fire(1)
+        
+    },
+    
+    onRobotScanned: function(enemy) {
+        this.fire(3.5)
+    },
+    
+    onHitWall: function() {
+        this.direction = this.direction == 'ahead' ? 'back' : 'ahead'
+    }
+    
+})
+
+new CrazyRobot()#{/else}</textarea>
 </p>
 <p>
     <label for="name">Nom du robot :</label>
@@ -52,6 +82,18 @@
 </div>
 
 <script type="text/javascript" charset="utf-8">
+    
+    window.onBespinLoad = function(){
+        $('#editor')[0].bespin.value = $("#script").val()
+        game.reload(editable)
+    };
+    $(document).bind("keyup", function(){
+        $("#script").val($('#editor')[0].bespin.value);
+    });
+
+
+    #{if robot.script}
+    
     var robotURL = #{jsAction @Application.robot(':name')/}    
     
     var crazy = new RobotDescription(robotURL({name: 'crazy'}));
@@ -67,15 +109,6 @@
         $('#control').show()
         
     })
-    
-    window.onBespinLoad = function(){
-        $('#editor')[0].bespin.value = $("#script").val()
-        game.reload(editable)
-    };
-    $(document).bind("keyup", function(){
-        $("#script").val($('#editor')[0].bespin.value);
-    });
-    
     
     $('#start').click(function() {
         switch($(this).html()) {
@@ -135,6 +168,8 @@
         $('#start').html('Start')
         
     })
+    
+    #{/if}
     
 </script>
 
