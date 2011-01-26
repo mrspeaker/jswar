@@ -1,4 +1,4 @@
-var gRoundLength = 10,
+var gRoundLength = 200,
     gNumBots = 12;
     
 var parisjs = {
@@ -32,6 +32,13 @@ var parisjs = {
         $.each(winners.slice(0,10), function(){
             $("<li></li>").appendTo("#win ul").text(this.name);
         });
+        
+        setTimeout(function(){
+            $("#restart").click();
+            setTimeout(function(){
+                $("#start").click();
+            }, 5000)
+        }, 5000);
         
         $("#timetime").hide()
     },

@@ -39,6 +39,14 @@
 
 
 <script type="text/javascript" charset="utf-8">
+    $(window).load(function(){
+        setTimeout(function(){
+            $("#restart").click();
+            setTimeout(function(){
+                $("#start").click();
+            }, 1000)
+        }, 100);
+    })
     var robotURL = #{jsAction @robot(':name')/}
         
     
