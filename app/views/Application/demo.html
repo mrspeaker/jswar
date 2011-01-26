@@ -7,18 +7,32 @@
 #{/set}
 
 #{set 'moreStyles'}
-    <style type="text/css" media="screen"></style>
+    <style type="text/css" media="screen">
+        #timetime{
+            display: none;
+            position:absolute;
+            top:0;
+            left:0;
+            width:100px;
+            height:80px;
+            color: #000;
+            background-color:#ff0;
+            font-size:24pt;
+            font-family:helvetica;
+            text-align: center;
+            line-height: 80px;
+        }
+    </style>
 #{/set}
 
 <div id="wrapper">
 	<header>
 	</header>
 	<div id="map">
-	    <canvas id="world" width="1920" height="960"></canvas>
+	    <canvas id="world" width="1900" height="960"></canvas>
 	</div>
 	<footer>
 		<ul id="players">
-			<li><a href="#" id="start">Start</a> - <a href="#" id="labels">Draw labels</a> - <a href="#" id="scans">Show scans</a> - <a href="#" id="restart">Restart</a></li>
 			<li>Earl</li>
 			<li>Gre</li>
 			<li>JeanSeb</li>
@@ -27,9 +41,8 @@
 	</footer>
 </div>
 <div id="debug">
-	Put all your debug stuffs here.
-	Go to /#debug to display it!
-</div>
+    <a href="#" id="start">Start</a> - <a href="#" id="labels">Draw labels</a> - <a href="#" id="scans">Show scans</a> - <a href="#" id="restart">Restart</a></div>
+<div id="timetime">120</div>
 
 <script type="text/javascript" charset="utf-8">
     var robotURL = #{jsAction @robot(':name')/}

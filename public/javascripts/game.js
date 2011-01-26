@@ -1,6 +1,7 @@
 var parisjs = {
     roundLength: 10,
     winners: [],
+    lastTime: 0,
     loadRobots: function(){
         // Fetch the bots, retrieve urls...
         var urls = [robotURL({name: 'tracker'}), robotURL({name: 'crazy'}), robotURL({name: 'walls'})],
@@ -13,6 +14,7 @@ var parisjs = {
     startRound: function(){
         this.startTime = new Date();
         this.running = true;
+        $("#timetime").show()
     },
     stopRound: function(bots){
         if (!this.running) return;
@@ -21,9 +23,14 @@ var parisjs = {
             winners = _.sortBy(survivors, function(bot){ return bot.energy });
         this.winners.push(winners[0])
         alert("winner " + winners[0] + "\n\n" + this.winners);
+        $("#timetime").hide()
     },
     tick: function(){
-        //console.log(this.roundLength - ((new Date() - this.startTime) / 1000));
+        var remain = ~~(this.roundLength - ((new Date() - this.startTime) / 1000));
+        if(remain != this.lastTime){
+            this.lastTime = remain;
+            $("#timetime").text(remain);
+        }
     },
     isRoundOver: function(){
         var finished = (new Date() - this.startTime) / 1000 > this.roundLength;
