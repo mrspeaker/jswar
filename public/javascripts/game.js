@@ -1,4 +1,4 @@
-var gRoundLength = 200,
+var gRoundLength = 110,
     gNumBots = 12;
     
 var parisjs = {
@@ -7,6 +7,7 @@ var parisjs = {
     loadRobots: function(){
         // Fetch the bots, retrieve urls...
         $.getJSON("/robots/list/" + gNumBots, function(urls){
+            console.log(urls, urls.length)
             if(urls.length < 4){
                 urls = urls.concat([robotURL({name: 'tracker'}), robotURL({name: 'crazy'}), robotURL({name: 'walls'})]);
             }
