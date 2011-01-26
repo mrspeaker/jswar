@@ -1,5 +1,5 @@
 var parisjs = {
-    roundLength: 3 * 60,
+    roundLength: 15,
     winners: [],
     lastTime: 0,
     loadRobots: function(){
@@ -23,8 +23,12 @@ var parisjs = {
         var survivors = $.map(bots, function(bot){ return {"name": bot.name, "energy": bot.energy } }),
             winners = survivors.sort(function(a,b){return a.energy<b.energy;});//_.sortBy(survivors, function(bot){ return bot.energy });
 
-        this.winners.push(winners[0])
-        alert("winner " + winners[0].name + "\n\n" + _.pluck(winners,"energy"));
+        this.winners.push(winners[0]);
+        $("#win").html("<ul></ul>");
+        $.each(winners.slice(0,10), function(){
+            $("<li></li>").appendTo("#win ul").text(this.name);
+        });
+        
         $("#timetime").hide()
     },
     tick: function(){
@@ -32,9 +36,6 @@ var parisjs = {
         if(remain != this.lastTime){
             this.lastTime = remain;
             $("#timetime").text(remain);
-        }
-        if(remain % 10 === 0){
-            this.oneDown(game.world.robots);
         }
     },
     isRoundOver: function(){
@@ -45,11 +46,12 @@ var parisjs = {
         return true;
     },
     oneDown: function(bots){
-        var survivors = $.map(bots, function(bot){ return bot.name + ":" + bot.energy; }),
-            winners = _.sortBy(survivors, function(bot){ return bot.energy }).slice(0,5);
+        var survivors = $.map(bots, function(bot){ return {"name": bot.name, "energy": bot.energy } }),
+            winners = survivors.sort(function(a,b){return a.energy<b.energy;});
+       
         $("#players").html("");
-        $.each(winners, function(winner){
-            $("<li></li>").appendTo("#players").text(winner.name);
+        $.each(winners, function(){
+            $("<li></li>").appendTo("#players").text(this.name);
         });
     }
 };
