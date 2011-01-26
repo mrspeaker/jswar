@@ -6,9 +6,7 @@ var TrackerRobot = Robot.extend({
     direction: 'ahead',
     
     play: function(turn) {
-        
-        for(var i=0;i<1000000000;i++) {}
-                
+                        
         if(this.direction == 'ahead') {
             this.ahead()
         } else {

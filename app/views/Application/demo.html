@@ -27,11 +27,11 @@
     var robotURL = #{jsAction @robot(':name')/}
     
     var sitting = new RobotDescription(robotURL({name: 'sitting'}))
-    var tracker = new RobotDescription(robotURL({name: 'tracker'}))  
+    //var tracker = new RobotDescription(robotURL({name: 'tracker'}))  
     var walls = new RobotDescription(robotURL({name: 'walls'}))
     var crazy = new RobotDescription(robotURL({name: 'crazy'}))  
     
-    var game = new Game('world', [sitting, tracker, walls, crazy], function() {
+    var game = new Game('world', [sitting, crazy, crazy, walls, walls, crazy], function() {
         
         $('#control').show()
         
@@ -92,8 +92,10 @@
     $('#restart').click(function() {
         
         //game.restart()
-        game.reloadAll('world', [sitting, tracker, walls, crazy], function() {
-            
+        // Test dynamic loading
+        window.tracker = new RobotDescription(robotURL({name: 'tracker'}));
+        game.reloadAll('world', [sitting, tracker, walls, crazy, crazy, crazy, crazy, crazy, tracker, tracker, tracker], function() {
+        
         });
         $('#start').html('Start');
         
